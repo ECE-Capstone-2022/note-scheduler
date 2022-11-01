@@ -24,7 +24,7 @@ def parse_input(filename):
     return data
 
 def find_max_amp(performance_data):
-    # a lot of loops but only run once
+    # a lot of loops but it's only run once
     curr_max = -5
     for time in performance_data:
         for item in time:
@@ -32,7 +32,7 @@ def find_max_amp(performance_data):
     return curr_max
 
 def digitize(performance_data, max_amp):
-    # a lot of loops but only run once
+    # a lot of loops but it's only run once
     ratio = max_volume/5
     for time in performance_data:
         time //= ratio
@@ -54,9 +54,13 @@ def data_to_performance (data):
             note1 = separate_syllables(note0, note1)
     return data
 
+#TODO & to test
+#multidimensional distance
+#total amplitude summation (try different averages)
+#number of total keys changed
 
 def main():
-    input_file = sys.argv[1]
+    input_file = sys.argv[1] #cmd line input
     data = parse_input(input_file)
     max_map = find_max_amp(data)
     digitize(data, max_amp)
