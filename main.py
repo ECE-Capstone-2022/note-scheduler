@@ -1,5 +1,5 @@
-import pychart
 import math
+import sys
 # class note:
 #     def __init__ (self, freq, amp):
 #         self.freq = freq # index of the key with 0 <= freq <= 68
@@ -22,7 +22,14 @@ def parse_input(filename):
     data = []
     for line in file:
         temp = [entry.rstrip() for entry in line.split()]
-        data.append(temp)
+        temp2 = []
+        for item in temp:
+            print("HAHAHAHAHHA")
+            print(item)
+            print(type(item))
+            temp2.append(float(item)) 
+        # data.append(int(item)) for item in temp
+        data.append(temp2)
     return data
 
 def find_max_amp(performance_data):
@@ -30,6 +37,8 @@ def find_max_amp(performance_data):
     curr_max = -5
     for time in performance_data:
         for item in time:
+            print(item)
+            print(curr_max)
             if item > curr_max: curr_max = item
     return curr_max
 
@@ -55,14 +64,14 @@ def digitize(performance_data, max_amp):
 
 #20 thru 88
 
-def get_pwm_from_amplitude(amp):
+# def get_pwm_from_amplitude(amp):
     #
     
 #need functions for 
 #tracking how long a note has been playing 
 #whether the note has gotten too quiet
 
-def track_note_length (hold_arr, curr_index, )
+# def track_note_length (hold_arr, curr_index, )
 
 def estimate_volume(hold_arr, og_vol, key_index, fade_param = -0.2):
     note_length = hold_arr[key_index]
@@ -75,7 +84,7 @@ def separate_syllables (note0, note1, max_volume = 5):
     return (note1 if (abs(note0 - note1) > difference) else 0)
 
 # much opportunity to optimize if we need to use C or other lower level
-language
+# language
 def data_to_performance (data, performance, hold_arr, initial_volumes):
     # first time stamp
     performance[0] = data[0]
@@ -96,14 +105,14 @@ def data_to_performance (data, performance, hold_arr, initial_volumes):
             estimated_vol = estimate_volume(hold_arr, initial_volumes, key_index)
             if estimated_vol:
             #key has not finished decaying
-                if !curr_vol:
+                if (not curr_vol):
                     # no sound
                     if hold_arr[key] != 0:
                         #LIFT
                         #currently playing
                         performance[time][key] = -1
                         hold_arr[key] = 0
-                    else if hold_arr[key] == 0:
+                    elif hold_arr[key] == 0:
                         #STAY UNPRESSED
                         #not currently playing
                         performance[time][key] = 0 
@@ -116,11 +125,11 @@ def data_to_performance (data, performance, hold_arr, initial_volumes):
                         performance[time][key] = curr_vol
                         hold_arr[key] = 1
                     
-                    else if estimated_vol >= curr_vol:
+                    elif estimated_vol >= curr_vol:
                         #keep
                         #STAY PRESSED
                         performance[time][key] = 0
-                        hold_arr[key]++
+                        hold_arr[key]+=1
     return performance
 
 #TODO & to test
