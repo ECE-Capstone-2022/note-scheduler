@@ -95,12 +95,12 @@ def data_to_performance (data, performance, hold_arr, initial_volumes):
         i+=1
 
     # get projected volumes for each key and compare to speech volume
-    for time in range(len(data)):
+    for time in range(1, len(data)):
         for key_index in range(1, 69):
 
             prev_vol = data[time-1][key_index]
             curr_vol = data[time][key_index]
-            print(curr_vol)
+            # print(curr_vol)
             # print(curr_vol)
             # note1 = separate_syllables(note0, note1)
             estimated_vol = estimate_volume(hold_arr, initial_volumes, key_index)
@@ -159,8 +159,9 @@ def init(input_file):
     initial_volumes = data[0]
     performance = data_to_performance(data, performance, hold_arr, initial_volumes)
 
-    # print(performance)
+    print(performance)
     return performance
+
 def main():
      input_file = sys.argv[1] #cmd line input
      init(input_file)
