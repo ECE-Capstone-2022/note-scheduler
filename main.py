@@ -111,6 +111,7 @@ def data_to_performance (data, performance, hold_arr, initial_volumes):
                         #RE-PRESS
                         # not loud enough, need repress
                         performance[time][key_index] = curr_vol
+                        initial_volumes[key_index] = curr_vol
                         hold_arr[key_index] = 1
                     
                     elif estimated_vol >= curr_vol:
@@ -135,11 +136,13 @@ def data_to_performance (data, performance, hold_arr, initial_volumes):
                     if hold_arr[key_index]:
                         #completely decayed, being pressed, need to repress
                         performance[time][key_index] = curr_vol
+                        initial_volumes[key_index] = curr_vol
                         hold_arr[key_index] = 1
 
                     elif (not hold_arr[key_index]):
                         #completely decayed, not pressed, need to repress
                         performance[time][key_index] = curr_vol
+                        initial_volumes[key_index] = curr_vol
                         hold_arr[key_index] = 1
 
                 elif (not curr_vol):
