@@ -72,7 +72,8 @@ def find_max_amp(performance_data):
 def estimate_volume(hold_arr, og_vol, key_index, fade_param = -0.2):
     note_length = hold_arr[key_index]
     # print(og_vol)
-    curr_vol = math.e**(og_vol[key_index]*fade_param)
+    curr_vol = math.e**(note_length*fade_param)
+    curr_vol *= og_vol[key_index]
     return curr_vol
 
 def separate_syllables (note0, note1, max_volume = 5):
