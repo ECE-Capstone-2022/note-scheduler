@@ -42,15 +42,6 @@ def find_max_amp(performance_data):
             if item > curr_max: curr_max = item
     return curr_max
 
-
-#DO NOT USE ONLY 5 LEVELS
-#CAN USE RANGE OF PMW
-def digitize(performance_data, max_amp):
-    # a lot of loops but it's only run once
-    ratio = max_volume/5
-    for time in performance_data:
-        time //= ratio
-
 # Force/power - linear
 # dB to power - logarithmic
 # power*=10 as dB+=10
@@ -77,6 +68,7 @@ def estimate_volume(hold_arr, og_vol, key_index, fade_param = -0.2):
     note_length = hold_arr[key_index]
     # print(og_vol)
     curr_vol = math.e**(og_vol[key_index]*fade_param)
+    return curr_vol
 
 def separate_syllables (note0, note1, max_volume = 5):
     #determines whether the key needs to be replayed
@@ -102,42 +94,43 @@ def data_to_performance (data, performance, hold_arr, initial_volumes):
         for key_index in range(1, 69):
             prev_vol = data[time-1][key_index]
             curr_vol = data[time][key_index]
+            # print(curr_vol)
             # note1 = separate_syllables(note0, note1)
             estimated_vol = estimate_volume(hold_arr, initial_volumes, key_index)
             if estimated_vol:
             #key has not finished decaying
                 if (not curr_vol):
                     # no sound
-                    if hold_arr[key] != 0:
+                    if hold_arr[key_index] != 0:
                         #LIFT
                         #currently playing
-                        performance[time][key] = -1
-                        hold_arr[key] = 0
-                    elif hold_arr[key] == 0:
+                        performance[time][key_index] = -1
+                        hold_arr[key_index] = 0
+                    elif hold_arr[key_index] == 0:
                         #STAY UNPRESSED
                         #not currently playing
-                        performance[time][key] = 0 
+                        performance[time][key_index] = 0 
 
                 if curr_vol:
                     # has sound
                     if estimated_vol < curr_vol:
                         #RE-PRESS
                         # not loud enough, need repress
-                        performance[time][key] = curr_vol
-                        hold_arr[key] = 1
+
+                        performance[time][key_index] = curr_vol
+                        hold_arr[key_index] = 1
                     
                     elif estimated_vol >= curr_vol:
                         #keep
                         #STAY PRESSED
-                        performance[time][key] = 0
-                        hold_arr[key]+=1
+                        performance[time][key_index] = 0
+                        hold_arr[key_index]+=1
     return performance
 
 #TODO & to test
 #multidimensional distance
 #total amplitude summation (try different averages)
 #number of total keys changed
-
 
 def init(input_file):
     # global hold_arr
@@ -169,5 +162,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
