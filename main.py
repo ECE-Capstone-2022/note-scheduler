@@ -19,6 +19,7 @@ import sys
 def parse_input(filename):
     #parses the input file into a 2D list
     file = open(filename, "r")
+    threshold = 0.2
     data = []
     for line in file:
         temp = [entry.rstrip() for entry in line.split()]
@@ -27,7 +28,11 @@ def parse_input(filename):
             # print("HAHAHAHAHHA")
             # print(item)
             # print(type(item))
-            temp2.append(float(item)) 
+            val = float(item)
+            if val >= threshold:
+                temp2.append(val) 
+            elif val < threshold:
+                temp2.append(0)
         # data.append(int(item)) for item in temp
         data.append(temp2)
     return data
@@ -92,8 +97,10 @@ def data_to_performance (data, performance, hold_arr, initial_volumes):
     # get projected volumes for each key and compare to speech volume
     for time in range(len(data)):
         for key_index in range(1, 69):
+
             prev_vol = data[time-1][key_index]
             curr_vol = data[time][key_index]
+            print(curr_vol)
             # print(curr_vol)
             # note1 = separate_syllables(note0, note1)
             estimated_vol = estimate_volume(hold_arr, initial_volumes, key_index)
@@ -150,10 +157,9 @@ def init(input_file):
 
     
     initial_volumes = data[0]
-    # digitize(data, max_amp)
     performance = data_to_performance(data, performance, hold_arr, initial_volumes)
 
-    print(performance)
+    # print(performance)
     return performance
 def main():
      input_file = sys.argv[1] #cmd line input
