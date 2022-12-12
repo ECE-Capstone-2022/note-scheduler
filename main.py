@@ -24,9 +24,9 @@ def parse_input(filename):
         temp = [entry.rstrip() for entry in line.split()]
         temp2 = []
         for item in temp:
-            print("HAHAHAHAHHA")
-            print(item)
-            print(type(item))
+            # print("HAHAHAHAHHA")
+            # print(item)
+            # print(type(item))
             temp2.append(float(item)) 
         # data.append(int(item)) for item in temp
         data.append(temp2)
@@ -37,8 +37,8 @@ def find_max_amp(performance_data):
     curr_max = -5
     for time in performance_data:
         for item in time:
-            print(item)
-            print(curr_max)
+            # print(item)
+            # print(curr_max)
             if item > curr_max: curr_max = item
     return curr_max
 
@@ -75,7 +75,8 @@ def digitize(performance_data, max_amp):
 
 def estimate_volume(hold_arr, og_vol, key_index, fade_param = -0.2):
     note_length = hold_arr[key_index]
-    curr_vol = math.e**(og_vol*fade_param)
+    # print(og_vol)
+    curr_vol = math.e**(og_vol[key_index]*fade_param)
 
 def separate_syllables (note0, note1, max_volume = 5):
     #determines whether the key needs to be replayed
@@ -137,14 +138,13 @@ def data_to_performance (data, performance, hold_arr, initial_volumes):
 #total amplitude summation (try different averages)
 #number of total keys changed
 
+
 def init(input_file):
     # global hold_arr
     hold_arr = [0] * 69
 
     # global initial_volumes
     initial_volumes = [0] * 69
-
-   
 
     # global data
     data = parse_input(input_file)
@@ -158,12 +158,10 @@ def init(input_file):
     
     initial_volumes = data[0]
     # digitize(data, max_amp)
-    performance = data_to_performance(data)
+    performance = data_to_performance(data, performance, hold_arr, initial_volumes)
 
-    outfile = open("output.txt", "w+")
-    outfile.write(performance)
-    outfile.close
-
+    print(performance)
+    return performance
 def main():
      input_file = sys.argv[1] #cmd line input
      init(input_file)
