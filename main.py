@@ -15,19 +15,17 @@ import sys
 # We really don't need those LMAO I was on vicodin
 
 # Most operations done on the data are in-place and destructive
+global threshold
+threshold = 5
 
 def parse_input(filename):
     #parses the input file into a 2D list
     file = open(filename, "r")
-    threshold = 0.2
     data = []
     for line in file:
         temp = [entry.rstrip() for entry in line.split()]
         temp2 = []
         for item in temp:
-            # print("HAHAHAHAHHA")
-            # print(item)
-            # print(type(item))
             val = float(item)
             if val >= threshold:
                 temp2.append(val) 
@@ -69,17 +67,17 @@ def find_max_amp(performance_data):
 
 # def track_note_length (hold_arr, curr_index, )
 
-def estimate_volume(hold_arr, og_vol, key_index, fade_param = -0.2):
+def estimate_volume(hold_arr, og_vol, key_index, fade_param = -0.9):
     note_length = hold_arr[key_index]
     # print(og_vol)
     curr_vol = math.e**(og_vol[key_index]*fade_param)
-    return curr_vol
+    return (curr_vol if curr_vol >= threshold else 0)
 
-def separate_syllables (note0, note1, max_volume = 5):
-    #determines whether the key needs to be replayed
-    #potential to improve this with ML
-    # difference = 2 # tweak with this param; must not exceed max_volume
-    return (note1 if (abs(note0 - note1) > difference) else 0)
+# def separate_syllables (note0, note1, max_volume = 5):
+#     #determines whether the key needs to be replayed
+#     #potential to improve this with ML
+#     # difference = 2 # tweak with this param; must not exceed max_volume
+#     return (note1 if (abs(note0 - note1) > difference) else 0)
 
 # much opportunity to optimize if we need to use C or other lower level
 # language
@@ -97,10 +95,13 @@ def data_to_performance (data, performance, hold_arr, initial_volumes):
     # get projected volumes for each key and compare to speech volume
     for time in range(1, len(data)):
         for key_index in range(1, 69):
+            #print("TIME:" + str(time))
+            #print("KEY_INDEX:" + str(key_index))
+            #print(data)
 
             prev_vol = data[time-1][key_index]
             curr_vol = data[time][key_index]
-            # print(curr_vol)
+            #print(curr_vol)
             # print(curr_vol)
             # note1 = separate_syllables(note0, note1)
             estimated_vol = estimate_volume(hold_arr, initial_volumes, key_index)
@@ -159,13 +160,13 @@ def init(input_file):
     initial_volumes = data[0]
     performance = data_to_performance(data, performance, hold_arr, initial_volumes)
 
-    print(performance)
+    # print(performance)
     return performance
 
-def main():
-     input_file = sys.argv[1] #cmd line input
-     init(input_file)
-     return 0
+# def main():
+#      input_file = sys.argv[1] #cmd line input
+#      init(input_file)
+#      return 0
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
